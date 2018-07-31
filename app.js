@@ -120,7 +120,7 @@ app.get('/lists/:id', (req, res) => {
 // Create new list
 app.post('/lists', (req, res) => {
   // Get board by body.board_id
-  Board.findById(req.body.board_id)
+  Board.findById(req.body.boardId)
   .then(board => {
     // Create new list
     List.create(req.body.list)
@@ -172,8 +172,10 @@ app.get('/todos/:id', (req, res) => {
 // Create new todo
 app.post('/todos', (req, res) => {
   // Find list by body.list_id
-  List.findById(req.body.list_id)
+  console.log(req.body.listId);
+  List.findById(req.body.listId)
   .then(list => {
+    console.log(list);
     // Create new todo
     Todo.create(req.body.todo)
     .then(todo => {
@@ -181,6 +183,7 @@ app.post('/todos', (req, res) => {
       list.todos.push(todo._id);
       list.save()
       .then(() => res.json({res: 'todo created'}))
+      .catch(err => catchErr(err));
     })
     .catch(err => catchErr(err));
   })
@@ -204,9 +207,8 @@ app.delete('/todos/:id', (req, res) => {
 // Error Handle
 function catchErr(err){
   console.log(err);
-  res.json({err: err});
 }
-app.listen(process.env.PORT, process.env.IP, () => {
+app.listen(3000, () => {
   console.log('Server started!');
 })
 // Start server
