@@ -182,7 +182,7 @@ app.post('/todos', (req, res) => {
       // Add todo to lists todos array
       list.todos.push(todo._id);
       list.save()
-      .then(() => res.json({res: 'todo created'}))
+      .then(() => res.json({res: 'todo created', todo}))
       .catch(err => catchErr(err));
     })
     .catch(err => catchErr(err));
@@ -192,6 +192,7 @@ app.post('/todos', (req, res) => {
 
 // Update todo by ID
 app.put('/todos/:id', (req, res) => {
+  console.log('Route hit!');
   Todo.findByIdAndUpdate(req.params.id, req.body.todo)
   .then(() => res.json({res: 'todo updated'}))
   .catch(err => catchErr(err));
@@ -208,7 +209,8 @@ app.delete('/todos/:id', (req, res) => {
 function catchErr(err){
   console.log(err);
 }
-app.listen(3000, () => {
+
+// Start server
+app.listen(process.env.PORT, process.env.IP, () => {
   console.log('Server started!');
 })
-// Start server
