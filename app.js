@@ -75,7 +75,7 @@ app.get('/boards/:id', (req, res) => {
 // Create new board
 app.post('/boards', (req, res) => {
   Board.create(req.body.board)
-  .then(board => res.json({res: board.title + ' created'}))
+  .then(board => res.json({res: board.title + ' created', board}))
   .catch(err => {
     catchErr(err);
   });
@@ -128,7 +128,7 @@ app.post('/lists', (req, res) => {
       // Add list ID reference to board lists array
       board.lists.push(list._id);
       board.save()
-      .then(list => res.json({res: list.title + ' created'}));
+      .then(() => res.json({res: list.title + ' created', list}));
     })
     .catch(err => catchErr(err));
   })
@@ -211,6 +211,6 @@ function catchErr(err){
 }
 
 // Start server
-app.listen(process.env.PORT, process.env.IP, () => {
+app.listen(process.env.PORT || 3000, process.env.IP || null, () => {
   console.log('Server started!');
 })
