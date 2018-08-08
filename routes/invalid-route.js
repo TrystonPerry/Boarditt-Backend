@@ -5,19 +5,19 @@ const router =         express.Router();
 // Functions
 const response = require('../functions/response');
 
-router.get('**', (req, res) => {
+router.get('', (req, res) => {
   response.sendErr()
 })
 
-router.post('**', (req, res) => {
+router.post('', (req, res) => {
   res.status(404).json({err: 'Invalid route'});
 })
 
-router.put('**', (req, res) => {
+router.put('', (req, res) => {
   res.status(404).json({err: 'Invalid route'});
 })
 
-router.delete('**', (req, res) => {
+router.delete('', (req, res) => {
   res.status(404).json({err: 'Invalid route'});
 })
 
