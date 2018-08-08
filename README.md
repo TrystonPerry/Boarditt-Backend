@@ -11,10 +11,15 @@ View the live demo for the API [Boarditt API](https://guarded-reaches-36717.hero
 Before running a server you would need to setup your own version of my enviorment variables with a `.env` file
 
 IP=127.0.0.1
+
 PORT=3000
+
 MONGOURI=[Yours]
+
 HASH_KEY=[Yours]
+
 HASH_COUNT=[Yours]
+
 
 Run `npm i` to install all necessary packages.
 
