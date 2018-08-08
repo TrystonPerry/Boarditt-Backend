@@ -6,19 +6,19 @@ const router =         express.Router();
 const response = require('../functions/response');
 
 router.get('', (req, res) => {
-  response.sendErr()
+  response.sendErr(500, 'Invalid Route', res);
 })
 
 router.post('', (req, res) => {
-  res.status(404).json({err: 'Invalid route'});
+  response.sendErr(500, 'Invalid Route', res);
 })
 
 router.put('', (req, res) => {
-  res.status(404).json({err: 'Invalid route'});
+  response.sendErr(500, 'Invalid Route', res);
 })
 
 router.delete('', (req, res) => {
-  res.status(404).json({err: 'Invalid route'});
+  response.sendErr(500, 'Invalid Route', res);
 })
 
 module.exports = router;
