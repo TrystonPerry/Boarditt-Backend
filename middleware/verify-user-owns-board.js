@@ -1,11 +1,12 @@
-const User = require('../models/user');
+const User =                    require('../models/user');
 
-const response = require('../functions/response');
+const response =                require('../functions/response');
 
 module.exports = (req, res, next) => {
   // Find user by ID
   User.findById(req.userData.userId)
   .then(user => {
+    if(user === null) return response.sendErr(500, 'User does not exist', res);
     // Loop through all of users boards
     for(let i = 0; i < user.boards.length; i++){
       // Check if user owns or has access to board
@@ -18,5 +19,5 @@ module.exports = (req, res, next) => {
     return response.sendErr(401, 'You dont have access to that board', res);
   })
   // Couldnt find a user with that ID
-  .catch(err => response.sendErr(500, 'Could not find user', res, err));
+  .catch(err => response.sendErr(500, 'Could not get user data', res, err));
 }

@@ -57,11 +57,4 @@ router.post('/login', (req, res, next) => {
   })
 })
 
-// Delete a user from database via _id
-router.delete('/:userId', (req, res, next) => {
-  User.remove({_id: req.params.userId})
-  // .then(data => sendMsg('User deleted', res))
-  // .catch(err => sendErr(err, 'User could not be deleted', res));
-})
-
 module.exports = router;

@@ -1,21 +1,21 @@
 // NPM Packages
-const express =       require('express');
-const app =           express();
-const bodyParser =    require('body-parser');
-const mongoose =      require('mongoose');
-const passport =      require('passport');
-const dotEnv =        require('dotenv');
+const express =                   require('express');
+const app =                       express();
+const bodyParser =                require('body-parser');
+const mongoose =                  require('mongoose');
+const passport =                  require('passport');
+const dotEnv =                    require('dotenv');
 
 // Middleware
-const setHeader =     require('./middleware/set-header');
+const setHeader =                 require('./middleware/set-header');
 
 // Routes
-const indexRoute =    require('./routes/index');
-const userRoute =     require('./routes/user');
-const boardsRoute =   require('./routes/board');
-const listsRoute =    require('./routes/list');
-const todosRoute =    require('./routes/todo');
-const invalidRoute =  require('./routes/invalid-route');
+const indexRoute =                require('./routes/index');
+const userRoute =                 require('./routes/user');
+const boardsRoute =               require('./routes/board');
+const listsRoute =                require('./routes/list');
+const todosRoute =                require('./routes/todo');
+const invalidRoute =              require('./routes/invalid-route');
 
 // Load enviornement variables
 dotEnv.config();
@@ -23,7 +23,7 @@ dotEnv.config();
 // Config public headers
 app.use(setHeader);
 
-// Express Extensions
+// Body Parser Settings
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
