@@ -5,39 +5,31 @@ const express = require('express'),
 
 const User = require('../models/user');
 
+const response = require('../functions/response');
 
 router.post('/signup', (req, res, next) => {
   if(!req.body.email || !req.body.password){
-    console.log(req.body);
-    return res.json({res: 'Please provide a email and password'});
+    return response.sendErr(500, 'Please provide an email or password', res);
   }
   bcrypt.hash(req.body.password, Number(process.env.HASH_KEY), (err, hash) => {
-    if(err) {
-      return res.status(500).json({err});
-    } else {
-      const user = new User({
-        email: req.body.email,
-        password: hash
-      })
-      user.save()
-      // .then(data => sendMsg('User created!', res))
-      .catch(err => {
-        // if(err.code = 11000) sendErr(err, 'User creation failed', res); // TODO make better error code check system
-      });
-    }
+    if(err) return response.sendErr(500, 'Error signing up')
+    const user = new User({
+      email: req.body.email,
+      password: hash
+    })
+    user.save()
+    .catch(err => {
+      if(err.code = 11000) response.sendErr(500, 'Could not save user', res, err);
+    });
   })
 })
 
 router.post('/login', (req, res, next) => {
   User.find({email: req.body.email})
   .then(user => {
-    if(user.length < 1){
-      return res.status(404).json({msg: 'Username or Password invalid'});
-    }
+    if(user.length < 1) return response.sendErr(500, 'Username or password invalid', res);
     bcrypt.compare(req.body.password, user[0].password, (err, result) => {
-      if(err) {
-        return res.status(404).json({msg: 'Username or Password invalid'});
-      } 
+      if(err) return response.sendErr(500, 'Username or password invalid', res);
       if(result) {
         const token = jwt.sign({
           email: user[0].email,
@@ -52,7 +44,7 @@ router.post('/login', (req, res, next) => {
           token
         });
       }
-      res.status(401).json({msg: 'Username or Password invalid'});
+      response.sendErr(500, 'Username or password invalid', res);
     })
   })
 })
