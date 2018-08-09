@@ -5,6 +5,7 @@ const bodyParser =                require('body-parser');
 const mongoose =                  require('mongoose');
 const passport =                  require('passport');
 const dotEnv =                    require('dotenv');
+const cors =                      require('cors');
 
 // Middleware
 const setHeader =                 require('./middleware/set-header');
@@ -21,7 +22,7 @@ const invalidRoute =              require('./routes/invalid-route');
 dotEnv.config();
 
 // Config public headers
-app.use(setHeader);
+app.use(cors());
 
 // Body Parser Settings
 app.use(bodyParser.urlencoded({extended: true}));
