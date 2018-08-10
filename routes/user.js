@@ -13,14 +13,21 @@ router.post('/signup', (req, res, next) => {
   }
   bcrypt.hash(req.body.password, Number(process.env.HASH_KEY), (err, hash) => {
     if(err) return response.sendErr(500, 'Error signing up')
-    const user = new User({
-      email: req.body.email,
+    User.create({
+      email: req.body.email, 
       password: hash
+    }, (err, user) => {
+      // if(err || user === null) return response.sendErr(500, 'Could not create user', res, err);
+      const token = jwt.sign({
+        email: user.email,
+        userId: user._id
+      }, process.env.HASH_KEY,
+      {
+        expiresIn: '1h'
+      })
+      res.status(200).json({msg: 'User created', token});
     })
-    user.save()
-    .catch(err => {
-      if(err.code = 11000) response.sendErr(500, 'Could not save user', res, err);
-    });
+    
   })
 })
 
@@ -37,7 +44,7 @@ router.post('/login', (req, res, next) => {
         }, 
         process.env.HASH_KEY, 
         {
-          expiresIn: '7d'
+          expiresIn: '1h'
         })
         return res.status(200).json({
           msg: 'Authentication Successful',
@@ -47,6 +54,17 @@ router.post('/login', (req, res, next) => {
       response.sendErr(500, 'Username or password invalid', res);
     })
   })
+})
+
+router.post('/verify-token', (req, res) => {
+  try {
+    const token = req.headers.authorization;
+    const decoded = jwt.verify(token, process.env.HASH_KEY);
+    req.userData = decoded;
+    res.json({msg: 'Authentication Successful'});
+  } catch(err) {
+    res.json({err: 'Authentication Unsuccesful'});
+  }
 })
 
 module.exports = router;

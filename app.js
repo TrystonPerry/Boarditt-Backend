@@ -7,9 +7,6 @@ const passport =                  require('passport');
 const dotEnv =                    require('dotenv');
 const cors =                      require('cors');
 
-// Middleware
-const setHeader =                 require('./middleware/set-header');
-
 // Routes
 const indexRoute =                require('./routes/index');
 const userRoute =                 require('./routes/user');
