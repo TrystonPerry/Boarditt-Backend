@@ -11,6 +11,8 @@ router.post('/signup', (req, res, next) => {
   if(!req.body.email || !req.body.password){
     return response.sendErr(500, 'Please provide an email or password', res);
   }
+  User.find({email: req.body.email})
+  .then(() => res.json({err: 'Email not available'}));
   bcrypt.hash(req.body.password, Number(process.env.HASH_KEY), (err, hash) => {
     if(err) return response.sendErr(500, 'Error signing up')
     User.create({
