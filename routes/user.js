@@ -11,25 +11,28 @@ router.post('/signup', (req, res, next) => {
   if(!req.body.email || !req.body.password){
     return response.sendErr(500, 'Please provide an email or password', res);
   }
-  User.find({email: req.body.email})
-  .then(() => res.json({err: 'Email not available'}));
-  bcrypt.hash(req.body.password, Number(process.env.HASH_KEY), (err, hash) => {
-    if(err) return response.sendErr(500, 'Error signing up')
-    User.create({
-      email: req.body.email, 
-      password: hash
-    }, (err, user) => {
-      // if(err || user === null) return response.sendErr(500, 'Could not create user', res, err);
-      const token = jwt.sign({
-        email: user.email,
-        userId: user._id
-      }, process.env.HASH_KEY,
-      {
-        expiresIn: '1h'
+  User.find({email: req.body.email}, (err, user) => {
+    if(user.length) {
+      return res.json({err: 'Email not available'});
+    } else {
+      bcrypt.hash(req.body.password, Number(process.env.HASH_KEY), (err, hash) => {
+        if(err) return response.sendErr(500, 'Error signing up')
+        User.create({
+          email: req.body.email, 
+          password: hash
+        }, (err, user) => {
+          // if(err || user === null) return response.sendErr(500, 'Could not create user', res, err);
+          const token = jwt.sign({
+            email: user.email,
+            userId: user._id
+          }, process.env.HASH_KEY,
+          {
+            expiresIn: '1h'
+          })
+          res.status(200).json({msg: 'User created', token});
+        })
       })
-      res.status(200).json({msg: 'User created', token});
-    })
-    
+    }
   })
 })
 
