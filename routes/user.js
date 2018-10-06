@@ -49,7 +49,7 @@ router.post('/login', (req, res, next) => {
         }, 
         process.env.HASH_KEY, 
         {
-          expiresIn: '1h'
+          expiresIn: req.body.stayLoggedIn ? '365d' : '1h'
         })
         return res.status(200).json({
           msg: 'Authentication Successful',
